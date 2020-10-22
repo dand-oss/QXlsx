@@ -2,10 +2,19 @@ cmake_minimum_required(VERSION 3.16)
 
 project(QXlsx VERSION 1.3.56 LANGUAGES CXX)
 
+###############
+# ASI default settings
+list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
+include(asv_cmake_defaults)
+asv_cmake_defaults( )
+###############
+
 option(BUILD_SHARED_LIB "Build shared library (DLL)." ON)
 
 include(GNUInstallDirs)
 
+list(APPEND CMAKE_PREFIX_PATH ${AQTDIR})
+set(QT_LIBINFIX "ASV")
 find_package(Qt5 CONFIG REQUIRED COMPONENTS Gui)
 
 #------------------------------------------------------------------------------
