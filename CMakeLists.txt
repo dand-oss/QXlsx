@@ -15,7 +15,7 @@ include(GNUInstallDirs)
 
 list(APPEND CMAKE_PREFIX_PATH ${AQTDIR})
 set(QT_LIBINFIX "ASV")
-find_package(Qt5 CONFIG REQUIRED COMPONENTS Gui)
+find_package(Qt6 CONFIG REQUIRED COMPONENTS Gui)
 
 #------------------------------------------------------------------------------
 # Library
@@ -45,7 +45,7 @@ target_sources(QXlsx PRIVATE
   ${files_cpp} ${files_h}
 )
 
-target_link_libraries(QXlsx PUBLIC Qt5::Gui Qt5::GuiPrivate)
+target_link_libraries(QXlsx PUBLIC Qt::Gui Qt::GuiPrivate)
 
 target_compile_definitions(QXlsx PRIVATE
     QT_NO_KEYWORDS
