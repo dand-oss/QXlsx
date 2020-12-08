@@ -179,7 +179,7 @@ void Styles::fixNumFmt(const Format &format)
     }
     else
     {
-        int id = format.numberFormatIndex();
+        const auto id = format.numberFormatIndex();
         //Assign proper format code, this is needed by dxf format
         const auto& it = m_customNumFmtIdMap.constFind(id);
         if (it != m_customNumFmtIdMap.constEnd())
@@ -400,7 +400,7 @@ void Styles::writeFonts(QXmlStreamWriter &writer) const
 {
     writer.writeStartElement(QStringLiteral("fonts"));
     writer.writeAttribute(QStringLiteral("count"), QString::number(m_fontsList.count()));
-    for (int i=0; i<m_fontsList.size(); ++i)
+    for (size_t i=0; i<m_fontsList.size(); ++i)
         writeFont(writer, m_fontsList[i], false);
     writer.writeEndElement();//fonts
 }
@@ -756,8 +756,8 @@ bool Styles::readNumFmts(QXmlStreamReader &reader)
 {
     Q_ASSERT(reader.name() == QLatin1String("numFmts"));
     const auto& attributes = reader.attributes();
-    bool hasCount = attributes.hasAttribute(QLatin1String("count"));
-    int count = hasCount ? attributes.value(QLatin1String("count")).toString().toInt() : -1;
+    const auto hasCount = attributes.hasAttribute(QLatin1String("count"));
+    const auto count = hasCount ? attributes.value(QLatin1String("count")).toString().toInt() : -1;
 
     //Read utill we find the numFmts end tag or ....
     while (!reader.atEnd() && !(reader.tokenType() == QXmlStreamReader::EndElement
@@ -790,8 +790,8 @@ bool Styles::readFonts(QXmlStreamReader &reader)
 {
     Q_ASSERT(reader.name() == QLatin1String("fonts"));
     const auto& attributes = reader.attributes();
-    bool hasCount = attributes.hasAttribute(QLatin1String("count"));
-    int count = hasCount ? attributes.value(QLatin1String("count")).toString().toInt() : -1;
+    const auto hasCount = attributes.hasAttribute(QLatin1String("count"));
+    const auto count = hasCount ? attributes.value(QLatin1String("count")).toString().toInt() : -1;
     while (!reader.atEnd() && !(reader.tokenType() == QXmlStreamReader::EndElement
                                && reader.name() == QLatin1String("fonts"))) {
         reader.readNextStartElement();
@@ -847,7 +847,7 @@ bool Styles::readFont(QXmlStreamReader &reader, Format &format)
                 color.loadFromXml(reader);
                 format.setProperty(FormatPrivate::P_Font_Color, color);
             } else if (reader.name() == QLatin1String("sz")) {
-                int sz = attributes.value(QLatin1String("val")).toString().toInt();
+                const auto sz = attributes.value(QLatin1String("val")).toString().toInt();
                 format.setFontSize(sz);
             } else if (reader.name() == QLatin1String("u")) {
                 QString value = attributes.value(QLatin1String("val")).toString();
@@ -1006,8 +1006,8 @@ bool Styles::readBorder(QXmlStreamReader &reader, Format &border)
     Q_ASSERT(reader.name() == QLatin1String("border"));
 
     const auto& attributes = reader.attributes();
-    bool isUp = attributes.hasAttribute(QLatin1String("diagonalUp"));
-    bool isDown = attributes.hasAttribute(QLatin1String("diagonalUp"));
+    const auto isUp = attributes.hasAttribute(QLatin1String("diagonalUp"));
+    const auto isDown = attributes.hasAttribute(QLatin1String("diagonalUp"));
     if (isUp && isDown)
         border.setDiagonalBorderType(Format::DiagnoalBorderBoth);
     else if (isUp)
@@ -1123,8 +1123,8 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                 //            qDebug()<<"... "<<i<<" "<<xfAttrs[i].name()<<xfAttrs[i].value();
 
                 if (xfAttrs.hasAttribute(QLatin1String("numFmtId"))) {
-                    int numFmtIndex = xfAttrs.value(QLatin1String("numFmtId")).toString().toInt();
-                    bool apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyNumberFormat")).toString());
+                    const auto numFmtIndex = xfAttrs.value(QLatin1String("numFmtId")).toString().toInt();
+                    const auto apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyNumberFormat")).toString());
                     if(apply) {
                         const auto& it = m_customNumFmtIdMap.constFind(numFmtIndex);
                         if (it == m_customNumFmtIdMap.constEnd())
@@ -1135,11 +1135,11 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                 }
 
                 if (xfAttrs.hasAttribute(QLatin1String("fontId"))) {
-                    int fontIndex = xfAttrs.value(QLatin1String("fontId")).toString().toInt();
+                    const auto fontIndex = xfAttrs.value(QLatin1String("fontId")).toString().toInt();
                     if (fontIndex >= m_fontsList.size()) {
                         qDebug("Error read styles.xml, cellXfs fontId");
                     } else {
-                        bool apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyFont")).toString());
+                        const auto apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyFont")).toString());
                         if(apply) {
                             Format fontFormat = m_fontsList[fontIndex];
                             for (int i=FormatPrivate::P_Font_STARTID; i<FormatPrivate::P_Font_ENDID; ++i) {
@@ -1151,7 +1151,7 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                 }
 
                 if (xfAttrs.hasAttribute(QLatin1String("fillId"))) {
-                    int id = xfAttrs.value(QLatin1String("fillId")).toString().toInt();
+                    const auto id = xfAttrs.value(QLatin1String("fillId")).toString().toInt();
                     if (id >= m_fillsList.size()) {
                         qDebug("Error read styles.xml, cellXfs fillId");
                     } else {
@@ -1176,11 +1176,11 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                 }
 
                 if (xfAttrs.hasAttribute(QLatin1String("borderId"))) {
-                    int id = xfAttrs.value(QLatin1String("borderId")).toString().toInt();
+                    const auto id = xfAttrs.value(QLatin1String("borderId")).toString().toInt();
                     if (id >= m_bordersList.size()) {
                         qDebug("Error read styles.xml, cellXfs borderId");
                     } else {
-                        bool apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyBorder")).toString());
+                        const auto apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyBorder")).toString());
                         if(apply) {
                             Format borderFormat = m_bordersList[id];
                             for (int i=FormatPrivate::P_Border_STARTID; i<FormatPrivate::P_Border_ENDID; ++i) {
@@ -1191,7 +1191,7 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                     }
                 }
 
-                bool apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyAlignment")).toString());
+                const auto apply = parseXsdBoolean(xfAttrs.value(QLatin1String("applyAlignment")).toString());
                 if(apply) {
                     reader.readNextStartElement();
                     if (reader.name() == QLatin1String("alignment")) {
@@ -1226,12 +1226,12 @@ bool Styles::readCellXfs(QXmlStreamReader &reader)
                         }
 
                         if (alignAttrs.hasAttribute(QLatin1String("indent"))) {
-                            int indent = alignAttrs.value(QLatin1String("indent")).toString().toInt();
+                            const auto indent = alignAttrs.value(QLatin1String("indent")).toString().toInt();
                             format.setIndent(indent);
                         }
 
                         if (alignAttrs.hasAttribute(QLatin1String("textRotation"))) {
-                            int rotation = alignAttrs.value(QLatin1String("textRotation")).toString().toInt();
+                            const auto rotation = alignAttrs.value(QLatin1String("textRotation")).toString().toInt();
                             format.setRotation(rotation);
                         }
 
@@ -1290,7 +1290,7 @@ bool Styles::readDxf(QXmlStreamReader &reader)
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("numFmt")) {
                 const auto& attributes = reader.attributes();
-                int id = attributes.value(QLatin1String("numFmtId")).toString().toInt();
+                const auto id = attributes.value(QLatin1String("numFmtId")).toString().toInt();
                 QString code = attributes.value(QLatin1String("formatCode")).toString();
                 format.setNumberFormat(id, code);
             } else if (reader.name() == QLatin1String("font")) {
