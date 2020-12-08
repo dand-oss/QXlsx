@@ -189,7 +189,7 @@ void Styles::fixNumFmt(const Format &format)
         else
         {
             bool found = false;
-            const auto& it = m_builtinNumFmtsHash.constBegin();
+            auto&& it = m_builtinNumFmtsHash.constBegin();
             while (it != m_builtinNumFmtsHash.constEnd())
             {
                 if (it.value() == id)
