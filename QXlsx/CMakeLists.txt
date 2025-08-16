@@ -13,14 +13,15 @@ set(CMAKE_AUTOMOC ON)
 
 include(GNUInstallDirs)
 
-if(NOT DEFINED QT_VERSION_MAJOR)
-    find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui REQUIRED)
-endif()
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui REQUIRED)
+# if(NOT DEFINED QT_VERSION_MAJOR)
+#    find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui REQUIRED)
+##endif()
+#find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui REQUIRED)
 
-if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
-    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
-endif()
+#if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+#    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
+#endif()
+message(STATUS "QT_VERSION_MAJOR=${QT_VERSION_MAJOR}")
 
 set(EXPORT_NAME QXlsxQt${QT_VERSION_MAJOR})
 
@@ -46,7 +47,7 @@ if(NOT DEFINED QXLSX_SOURCEPATH)
 endif()
 
 # Due historical reasons this value is kept off
-option(BUILD_SHARED_LIBS "Build in shared lib mode" OFF)
+option(BUILD_SHARED_LIBS "Build in shared lib mode" ON)
 
 set(SRC_FILES
     source/xlsxcellrange.cpp
